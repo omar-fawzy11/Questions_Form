@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTC Drugs Safety in Special Populations | Clinical Assessment</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            clinical: {
+              blue: '#0284c7',
+              navy: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Smooth transitions */
+    .fade-in {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Option selection glow */
+    .option-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-card:hover:not(.locked) {
+      transform: translateY(-2px);
+      border-color: #0d9488;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08);
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- TOP HEADER / NAV BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="confirmExitToHome()">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 leading-tight text-base sm:text-lg flex items-center gap-1.5">
+            <span>OTC Drugs Safety</span>
+            <span class="text-teal-600 font-extrabold text-xs px-2 py-0.5 bg-teal-50 border border-teal-200 rounded-full">Rx Assessment</span>
+          </h1>
+          <p class="text-xs text-slate-500 hidden sm:block">Special Populations Clinical Practice Guidelines</p>
+        </div>
+      </div>
+
+      <!-- Header Status details when Quiz is active -->
+      <div id="navQuizMeta" class="hidden flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm">
+        <div class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-lg text-slate-700 font-mono text-xs">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span id="quizTimerDisplay">00:00</span>
+        </div>
+        <div class="hidden md:flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg text-slate-700">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span id="navUserName" class="font-medium truncate max-w-[120px]">Dr. Pharmacist</span>
+          <span class="text-slate-400">•</span>
+          <span id="navUserLevel" class="text-teal-700 font-semibold">Graduate</span>
+        </div>
+        <div id="navModeBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+          <span id="navModeName">Instant Feedback</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+    <!-- ==================== VIEW 1: LANDING & SETUP VIEW ==================== -->
+    <div id="landingView" class="fade-in max-w-3xl mx-auto space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-br from-teal-900 via-teal-800 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
+        <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-200 border border-teal-400/30 text-xs font-semibold">
+            <svg class="w-3.5 h-3.5 text-teal-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Clinical Competency & Drug Safety Series
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            OTC Drugs Safety in Special Populations
+          </h2>
+          <p class="text-teal-100/90 text-sm sm:text-base leading-relaxed max-w-2xl">
+            Evaluate and sharpen your clinical decision-making across high-risk patient groups: 
+            <strong>Pediatrics, Geriatrics, Renal Impairment,</strong> and <strong>Hepatic Dysfunction</strong> across 5 core OTC categories.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2 text-xs font-medium text-teal-200">
+            <span class="px-2.5 py-1 bg-white/10 rounded-md">20 Questions</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded-md">5 Clinical Modules</span>
+            <span class="px-2.5 py-1 bg-white/10 rounded-md">Evidence-Based Explanations</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration & Configuration Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Pharmacist Information & Assessment Mode</h3>
+          <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Please provide your details and choose your preferred interactive evaluation mode.</p>
+        </div>
+
+        <form id="onboardingForm" onsubmit="event.preventDefault(); startQuiz();" class="space-y-6">
+          <!-- User Details -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="userNameInput" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5">
+                Full Name <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="userNameInput" 
+                  required 
+                  placeholder="e.g. Dr. Sarah Jenkins"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="userLevelInput" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5">
+                Pharmacist Level <span class="text-rose-500">*</span>
+              </label>
+              <select 
+                id="userLevelInput" 
+                required 
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all bg-white"
+              >
+                <option value="" disabled selected>Select your current stage</option>
+                <option value="Graduate Pharmacist">Graduate Pharmacist</option>
+                <option value="Pharmacy Intern">Pharmacy Intern</option>
+                <option value="Undergraduate Student">Undergraduate Student</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Mode Selection -->
+          <div>
+            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-2">
+              Select Correction & Evaluation Mode <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Mode Card 1: Instant Feedback -->
+              <label class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all option-card" id="modeCardInstant">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center font-bold text-lg">
+                      ⚡
+                    </div>
+                    <div>
+                      <span class="block font-bold text-sm text-slate-900">Instant Feedback Mode</span>
+                      <span class="inline-block px-2 py-0.5 bg-teal-100 text-teal-800 text-[10px] font-semibold rounded-full mt-0.5">Study & Learn</span>
+                    </div>
+                  </div>
+                  <input type="radio" name="quizMode" value="instant" checked class="mt-1 text-teal-600 focus:ring-teal-500">
+                </div>
+                <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+                  Reveals immediate correctness on every click, highlights the right choice in green, and provides clinical rationales on the spot.
+                </p>
+              </label>
+
+              <!-- Mode Card 2: End Review -->
+              <label class="relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all option-card" id="modeCardEnd">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-lg">
+                      📋
+                    </div>
+                    <div>
+                      <span class="block font-bold text-sm text-slate-900">End Review Mode</span>
+                      <span class="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-semibold rounded-full mt-0.5">Exam Simulation</span>
+                    </div>
+                  </div>
+                  <input type="radio" name="quizMode" value="review" class="mt-1 text-teal-600 focus:ring-teal-500">
+                </div>
+                <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+                  Navigate questions freely, revise choices, and submit at the end to generate an in-depth score report and complete answer audit.
+                </p>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section Preview List -->
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Curriculum Breakdown</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span><strong>I.</strong> Analgesics & NSAIDs (5 Questions)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span><strong>II.</strong> Antihistamines & Decongestants (4 Questions)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span><strong>III.</strong> Mucolytics & Antitussives (3 Questions)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span><strong>IV.</strong> Gastrointestinal Drugs (4 Questions)</span>
+              </div>
+              <div class="flex items-center gap-2 sm:col-span-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span><strong>V.</strong> Acid-Related Drugs: GERD & Antacids (4 Questions)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Message placeholder -->
+          <div id="setupErrorMsg" class="hidden p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium"></div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="w-full py-3.5 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-bold text-sm sm:text-base shadow-lg shadow-teal-600/25 transition-all flex items-center justify-center gap-2"
+          >
+            <span>Begin Assessment Now</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 2: ACTIVE QUIZ VIEW ==================== -->
+    <div id="quizView" class="hidden fade-in space-y-6">
+
+      <!-- Top Question Header & Progress -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span id="questionSectionBadge" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200">
+              Section I: Analgesics & NSAIDs
+            </span>
+            <span id="questionIndexBadge" class="text-xs font-bold text-slate-500">
+              Question 1 of 20
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span id="progressStatsText" class="text-xs font-medium text-slate-500">
+              Answered: <strong id="answeredCountSpan" class="text-slate-800">0</strong> / 20
+            </span>
+            <!-- Quick overview drawer trigger on mobile/desktop -->
+            <button 
+              type="button" 
+              onclick="toggleQuestionGridModal()" 
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+              <span>Question Grid</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+          <div id="quizProgressBar" class="bg-teal-600 h-full rounded-full transition-all duration-300 ease-out" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Main Question Container Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        
+        <!-- Question Text -->
+        <div class="space-y-2">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-sm shrink-0 mt-0.5" id="currentQNumberDisplay">
+              1
+            </div>
+            <h3 id="currentQuestionText" class="text-base sm:text-xl font-bold text-slate-900 leading-snug">
+              Question text goes here?
+            </h3>
+          </div>
+          <div id="currentQuestionSpecialBadge" class="ml-11 inline-block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            Special Population Target
+          </div>
+        </div>
+
+        <!-- Choices List -->
+        <div id="choicesContainer" class="space-y-3 pt-2">
+          <!-- Dynamically injected choices -->
+        </div>
+
+        <!-- Instant Feedback Explanation Box (Only used in Instant Feedback mode) -->
+        <div id="instantFeedbackBox" class="hidden fade-in p-4 sm:p-5 rounded-xl border text-sm transition-all">
+          <div class="flex items-start gap-3">
+            <div id="feedbackIcon" class="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5"></div>
+            <div class="space-y-1">
+              <h5 id="feedbackHeading" class="font-bold text-sm">Correct Answer!</h5>
+              <p id="feedbackRationale" class="text-xs sm:text-sm leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Controls / Navigation -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+          <button 
+            type="button" 
+            id="prevQuestionBtn" 
+            onclick="navigateQuestion(-1)"
+            class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <span>Previous</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <!-- Submit Quiz button (Always active or visible in End Review mode, or when on question 20) -->
+            <button 
+              type="button" 
+              id="submitQuizBtn" 
+              onclick="promptSubmitQuiz()" 
+              class="hidden px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white text-xs sm:text-sm font-bold shadow-md shadow-teal-600/20 transition-all flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Submit & Grade Quiz</span>
+            </button>
+
+            <!-- Next button -->
+            <button 
+              type="button" 
+              id="nextQuestionBtn" 
+              onclick="navigateQuestion(1)"
+              class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-all flex items-center gap-2"
+            >
+              <span>Next</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Question Grid Navigator (inline on desktop) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Quick Question Navigator</span>
+          <div class="flex items-center gap-3 text-[11px] text-slate-500">
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Answered</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full border border-slate-300 bg-white"></span> Unanswered</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full ring-2 ring-teal-500 bg-white"></span> Current</span>
+          </div>
+        </div>
+        <div id="questionPillsContainer" class="flex flex-wrap gap-2">
+          <!-- Dynamically generated question numbers 1-20 -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== VIEW 3: RESULTS & COMPREHENSIVE SUMMARY REPORT ==================== -->
+    <div id="resultsView" class="hidden fade-in space-y-8">
+      
+      <!-- Score Hero Banner -->
+      <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm overflow-hidden relative">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-3 text-center md:text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold" id="scoreVerdictBadge">
+              <!-- Result tier badge injected dynamically -->
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Assessment Performance Report
+            </h2>
+            <p class="text-slate-600 text-xs sm:text-sm max-w-lg">
+              Here is your comprehensive evaluation for <strong>OTC Drugs Safety in Special Populations</strong>. 
+              Review your answers, rationale points, and category-level mastery.
+            </p>
+            <div class="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-slate-500 pt-1">
+              <div>Participant: <strong id="resUserName" class="text-slate-800"></strong></div>
+              <div>•</div>
+              <div>Role: <strong id="resUserLevel" class="text-slate-800"></strong></div>
+              <div>•</div>
+              <div>Mode: <strong id="resMode" class="text-slate-800"></strong></div>
+              <div>•</div>
+              <div>Duration: <strong id="resDuration" class="text-slate-800"></strong></div>
+              <div>•</div>
+              <div>Date: <strong id="resDate" class="text-slate-800"></strong></div>
+            </div>
+          </div>
+
+          <!-- Score Circular Gauge / Big Display -->
+          <div class="shrink-0 flex flex-col items-center justify-center p-6 bg-slate-50 rounded-2xl border border-slate-200 min-w-[200px]">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Final Score</span>
+            <div class="flex items-baseline gap-1">
+              <span id="resScoreValue" class="text-5xl font-black text-slate-900">0</span>
+              <span class="text-2xl font-bold text-slate-400">/ 20</span>
+            </div>
+            <div id="resPercentage" class="text-sm font-bold text-teal-700 mt-1">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Competency Breakdown -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+          <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Clinical Category Mastery
+        </h3>
+        <div id="categoryStatsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Action Buttons Bar -->
+      <div class="no-print flex flex-wrap items-center justify-between gap-3">
+        <!-- Filter Tabs -->
+        <div class="flex items-center gap-1.5 p-1 bg-slate-200/80 rounded-xl text-xs font-semibold">
+          <button type="button" onclick="setReviewFilter('all')" id="filterBtnAll" class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-800">
+            All Questions (20)
+          </button>
+          <button type="button" onclick="setReviewFilter('incorrect')" id="filterBtnIncorrect" class="px-3 py-1.5 rounded-lg hover:text-slate-900 text-slate-600">
+            Incorrect (<span id="incorrectCountBadge">0</span>)
+          </button>
+          <button type="button" onclick="setReviewFilter('correct')" id="filterBtnCorrect" class="px-3 py-1.5 rounded-lg hover:text-slate-900 text-slate-600">
+            Correct (<span id="correctCountBadge">0</span>)
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="window.print()" 
+            class="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-2 transition-all"
+          >
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            <span>Print Report</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="restartQuiz()" 
+            class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md shadow-teal-600/20 flex items-center gap-2 transition-all"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span>Retake Assessment</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Detailed Question Audit List -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">
+          Comprehensive Answer & Explanation Audit
+        </h3>
+        <div id="reviewQuestionsContainer" class="space-y-4">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL: QUESTION GRID NAVIGATOR (for quick jumping) -->
+  <div id="questionGridModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between">
+        <h4 class="font-bold text-slate-900 text-base">Question Directory</h4>
+        <button type="button" onclick="toggleQuestionGridModal()" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500">Jump directly to any question. You can review and update answers before final submission.</p>
+      
+      <div id="modalGridPills" class="grid grid-cols-5 gap-2.5 py-2">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="pt-2 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="toggleQuestionGridModal()" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRM SUBMIT MODAL (warns if questions unanswered) -->
+  <div id="confirmSubmitModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-center">
+      <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
+        ⚠️
+      </div>
+      <h4 class="font-bold text-slate-900 text-lg">Ready to Grade Assessment?</h4>
+      <p id="confirmSubmitMsg" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+        You have answered all 20 questions. Would you like to finalize and generate your performance report?
+      </p>
+      <div class="pt-2 flex items-center justify-center gap-3">
+        <button 
+          type="button" 
+          onclick="closeSubmitModal()" 
+          class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs sm:text-sm font-semibold hover:bg-slate-50 transition-all"
+        >
+          Review Questions
+        </button>
+        <button 
+          type="button" 
+          onclick="finalizeQuizSubmission()" 
+          class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-teal-600/20 transition-all"
+        >
+          Confirm & Grade Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="no-print mt-auto border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>© 2026 OTC Drugs Safety Assessment • Special Populations Pharmacy Board Review</p>
+      <p class="text-slate-400">Designed for Pharmacists, Interns & Pharmacy Students</p>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    /* ==================== QUIZ DATA DEFINITION ==================== */
+    const QUIZ_DATA = [
+      // I. Analgesics & NSAIDs
+      {
+        id: 1,
+        sectionId: 'analgesics',
+        sectionTitle: 'I. Analgesics & NSAIDs',
+        targetPopulation: 'Pediatrics (< 12 Years)',
+        question: "Ibuprofen dosing starts being suitable for children from the age of:",
+        choices: [
+          "6 months",
+          "1 year",
+          "2 years",
+          "6 years"
+        ],
+        correctIndex: 0, // 6 months
+        explanation: "According to pediatric clinical guidelines and FDA/EMA OTC monographs, Ibuprofen is approved for antipyretic and analgesic use in infants starting from 6 months of age (5–10 mg/kg every 6–8 hours). For infants under 6 months, Paracetamol (Acetaminophen) is the safe analgesic/antipyretic of choice."
+      },
+      {
+        id: 2,
+        sectionId: 'analgesics',
+        sectionTitle: 'I. Analgesics & NSAIDs',
+        targetPopulation: 'Pediatrics (< 12 Years)',
+        question: "Regarding Paracetamol + Caffeine combinations, what is the recommendation for children < 12 years?",
+        choices: [
+          "Safe to use",
+          "Not recommended",
+          "Recommended for tension headaches",
+          "Use half dose"
+        ],
+        correctIndex: 1, // Not recommended
+        explanation: "Caffeine combination analgesics are not recommended in children under 12 years of age due to potential stimulant side effects (tachycardia, insomnia, hyperexcitability, jitteriness) and lack of demonstrated safety/efficacy superiority over plain paracetamol in this age demographic."
+      },
+      {
+        id: 3,
+        sectionId: 'analgesics',
+        sectionTitle: 'I. Analgesics & NSAIDs',
+        targetPopulation: 'Geriatrics (≥ 65 Years)',
+        question: "In geriatric patients, why is it recommended to avoid chronic use of Aspirin for primary CV prevention without a doctor's advice?",
+        choices: [
+          "Risk of confusion",
+          "Increased GI bleeding risk",
+          "Risk of weight gain",
+          "Risk of skin rash"
+        ],
+        correctIndex: 1, // Increased GI bleeding risk
+        explanation: "Recent landmark clinical trials (such as ASPREE) and updated ACC/AHA guidelines demonstrate that for primary cardiovascular prevention in older adults (≥65–70 years), the elevated risk of major gastrointestinal and intracranial bleeding significantly outweighs any modest ischemic protection."
+      },
+      {
+        id: 4,
+        sectionId: 'analgesics',
+        sectionTitle: 'I. Analgesics & NSAIDs',
+        targetPopulation: 'Hepatic Impairment',
+        question: "In patients with severe liver disease, what is the maximum recommended daily dose of Paracetamol?",
+        choices: [
+          "4 g/day",
+          "3-4 g/day",
+          "2-3 g/day",
+          "No limit"
+        ],
+        correctIndex: 2, // 2-3 g/day
+        explanation: "While the standard maximum daily dose of Paracetamol in healthy adults is 4 g/day, in patients with severe hepatic impairment, cirrhosis, or chronic malnutrition/alcoholism, the maximum daily dose should be reduced to 2–3 g/day (or 2 g/day in chronic cirrhosis) to prevent toxic NAPQI accumulation due to depleted glutathione reserves."
+      },
+      {
+        id: 5,
+        sectionId: 'analgesics',
+        sectionTitle: 'I. Analgesics & NSAIDs',
+        targetPopulation: 'Renal Impairment (eGFR < 30)',
+        question: "Which analgesic should be strictly avoided in patients with eGFR < 30 mL/min to prevent acute kidney injury (AKI)?",
+        choices: [
+          "Paracetamol",
+          "Ibuprofen",
+          "Paracetamol + caffeine",
+          "None of the above"
+        ],
+        correctIndex: 1, // Ibuprofen
+        explanation: "NSAIDs such as Ibuprofen inhibit renal cyclooxygenase (COX), blocking vasodilatory prostaglandins (PGE2, PGI2) that maintain afferent arteriolar perfusion. In severe renal impairment (eGFR < 30 mL/min), this causes acute afferent vasoconstriction, precipitously dropping GFR and triggering Acute Kidney Injury (AKI) and fluid retention."
+      },
+
+      // II. Antihistamines & Decongestants
+      {
+        id: 6,
+        sectionId: 'antihistamines',
+        sectionTitle: 'II. Antihistamines & Decongestants',
+        targetPopulation: 'Pediatrics (< 12 Years)',
+        question: "What is the recommendation for Xylometazoline nasal spray (Otrivin®) in children?",
+        choices: [
+          "Safe from birth",
+          "Safe from 2 years",
+          "Safe from 6 years",
+          "Avoid in all children"
+        ],
+        correctIndex: 1, // Safe from 2 years
+        explanation: "Pediatric formulations of Xylometazoline (0.05%) are licensed and safe for use from 2 years of age (used for a maximum of 3–5 consecutive days to prevent rhinitis medicamentosa). For infants under 2 years, topical imidazoline decongestants are contraindicated due to systemic absorption risks, hypothermia, and central respiratory depression; isotonic/hypertonic saline is the safe standard."
+      },
+      {
+        id: 7,
+        sectionId: 'antihistamines',
+        sectionTitle: 'II. Antihistamines & Decongestants',
+        targetPopulation: 'Geriatrics (≥ 65 Years)',
+        question: "For a geriatric patient (≥ 65 years), what is the recommendation for using first-generation antihistamines like Diphenhydramine?",
+        choices: [
+          "Safe to use",
+          "Use with caution",
+          "Do not use",
+          "Only use at bedtime"
+        ],
+        correctIndex: 2, // Do not use
+        explanation: "Under the American Geriatrics Society (AGS) Beers Criteria®, first-generation antihistamines (Diphenhydramine, Chlorpheniramine, Hydroxyzine) should be strictly avoided ('Do not use') in older adults due to potent anticholinergic toxicity: high risk of cognitive decline, acute confusion/delirium, urinary retention, severe constipation, and fall/fracture risk."
+      },
+      {
+        id: 8,
+        sectionId: 'antihistamines',
+        sectionTitle: 'II. Antihistamines & Decongestants',
+        targetPopulation: 'Hepatic & Renal Impairment',
+        question: "Which 2nd Generation antihistamine requires a dose adjustment in both hepatic and renal impairment?",
+        choices: [
+          "Fexofenadine",
+          "Levocetirizine",
+          "Cetirizine",
+          "Pheniramine"
+        ],
+        correctIndex: 2, // Cetirizine
+        explanation: "Cetirizine undergoes elimination via both renal filtration (~70%) and partial hepatic metabolism (~10-15%). In patients with moderate-to-severe renal impairment (CrCl < 50 mL/min) and/or hepatic insufficiency, the recommended starting dose is halved (5 mg once daily instead of 10 mg) to prevent excessive somnolence and drug accumulation."
+      },
+      {
+        id: 9,
+        sectionId: 'antihistamines',
+        sectionTitle: 'II. Antihistamines & Decongestants',
+        targetPopulation: 'Renal Impairment',
+        question: "For a patient with severe Renal Impairment, which oral decongestant requires a dose reduction?",
+        choices: [
+          "Pseudoephedrine",
+          "Phenylephrine",
+          "Saline spray",
+          "Mometasone"
+        ],
+        correctIndex: 0, // Pseudoephedrine
+        explanation: "Pseudoephedrine is predominantly excreted unchanged in the urine (55% to 75%). In severe renal impairment, drug clearance is significantly reduced, leading to systemic accumulation and dangerous sympathomimetic adverse effects such as severe hypertension, cardiac arrhythmias, tremors, and CNS hyperstimulation."
+      },
+
+      // III. Mucolytics & Antitussives
+      {
+        id: 10,
+        sectionId: 'mucolytics',
+        sectionTitle: 'III. Mucolytics & Antitussives',
+        targetPopulation: 'Pediatrics (< 12 Years)',
+        question: "What is the minimum age for using ivy leaves (ivyrospan®) in children?",
+        choices: [
+          "6 months",
+          "2 years",
+          "6 years",
+          "12 years"
+        ],
+        correctIndex: 1, // 2 years
+        explanation: "According to the European Medicines Agency (EMA) Herbal Medicinal Products Committee (HMPC), Hedera helix (ivy leaves extract) is contraindicated in children under 2 years of age because of the general risk of worsening respiratory symptoms and potential gastrointestinal irritation. Safe administration begins at 2 years of age."
+      },
+      {
+        id: 11,
+        sectionId: 'mucolytics',
+        sectionTitle: 'III. Mucolytics & Antitussives',
+        targetPopulation: 'Geriatrics (≥ 65 Years)',
+        question: "Which antitussive is considered safe for geriatric patients due to its low CNS impact?",
+        choices: [
+          "Cloperastine (notussil®)",
+          "Dextromethorphan",
+          "Levodropropizine (Tussistop®)",
+          "Diphenhydramine"
+        ],
+        correctIndex: 2, // Levodropropizine
+        explanation: "Levodropropizine is a peripheral non-opioid antitussive that acts by inhibiting C-fiber sensory neuropeptide release in the tracheobronchial tree. Because it does not cross the blood-brain barrier to any significant extent, it does not cause central sedation, respiratory depression, constipation, or cognitive clouding, making it very well-tolerated in elderly patients."
+      },
+      {
+        id: 12,
+        sectionId: 'mucolytics',
+        sectionTitle: 'III. Mucolytics & Antitussives',
+        targetPopulation: 'Geriatric & Hepatic',
+        question: "Which mucolytic is considered safe for both geriatric and hepatic patients without caution?",
+        choices: [
+          "Bromhexine (bisolvon®)",
+          "Ambroxol",
+          "Acetylcysteine",
+          "Dextromethorphan"
+        ],
+        correctIndex: 2, // Acetylcysteine
+        explanation: "Acetylcysteine (N-acetylcysteine) has a documented safety profile in elderly and hepatic patients without requiring dosage cautions. In fact, N-acetylcysteine acts as a direct precursor to glutathione and possesses known hepatoprotective antioxidant properties."
+      },
+
+      // IV. Gastrointestinal Drugs
+      {
+        id: 13,
+        sectionId: 'gi',
+        sectionTitle: 'IV. Gastrointestinal Drugs (Diarrhea & Constipation)',
+        targetPopulation: 'Pediatrics (Infants)',
+        question: "Glycerin suppositories (as OTC) are considered safe for infants from the age of:",
+        choices: [
+          "Birth",
+          "2 years",
+          "6 years",
+          "12 years"
+        ],
+        correctIndex: 0, // Birth
+        explanation: "Infant glycerin suppositories act purely through local hyperosmotic and lubricating mechanisms, stimulating rectal evacuation reflex without systemic absorption. They are clinically approved and considered safe from birth (neonates/infants) for acute, occasional relief of pediatric constipation."
+      },
+      {
+        id: 14,
+        sectionId: 'gi',
+        sectionTitle: 'IV. Gastrointestinal Drugs (Diarrhea & Constipation)',
+        targetPopulation: 'Geriatrics (≥ 65 Years)',
+        question: "For a geriatric patient, how should Loperamide be used?",
+        choices: [
+          "Avoid completely",
+          "Lowest effective dose for shortest duration",
+          "Higher doses for better effect",
+          "Once a week only"
+        ],
+        correctIndex: 1, // Lowest effective dose for shortest duration
+        explanation: "Elderly patients are at heightened risk of adverse effects from Loperamide due to reduced gastrointestinal motility and potential cardiac conduction abnormalities (QT prolongation). It should always be utilized at the lowest effective dose for the shortest duration (maximum 48 hours for acute self-care) while monitoring for fecal impaction or paralytic ileus."
+      },
+      {
+        id: 15,
+        sectionId: 'gi',
+        sectionTitle: 'IV. Gastrointestinal Drugs (Diarrhea & Constipation)',
+        targetPopulation: 'Geriatrics (≥ 65 Years)',
+        question: "Which laxative is preferred for \"Chronic use\" in geriatric patients?",
+        choices: [
+          "Magnesium citrate",
+          "Bisacodyl",
+          "Psyllium",
+          "Castor oil"
+        ],
+        correctIndex: 2, // Psyllium
+        explanation: "Bulk-forming laxatives such as Psyllium (ispaghula husk) are the preferred first-line agents for chronic constipation in older adults (along with osmotic macrogols/PEG), as they mimic physiological defecation without causing electrolyte shifts, mucosal irritation, or bowel dependency, provided adequate fluid intake is maintained."
+      },
+      {
+        id: 16,
+        sectionId: 'gi',
+        sectionTitle: 'IV. Gastrointestinal Drugs (Diarrhea & Constipation)',
+        targetPopulation: 'Renal Impairment',
+        question: "Oral Rehydration Salts (ORS) should be avoided in patients with:",
+        choices: [
+          "Diarrhea",
+          "Severe renal failure",
+          "Severe hepatic failure",
+          "Children < 2 years"
+        ],
+        correctIndex: 1, // Severe renal failure
+        explanation: "Standard WHO/UNICEF Oral Rehydration Salts (ORS) contain significant concentrations of potassium chloride and sodium chloride. In patients with severe renal failure (anuria/oliguria), the kidneys cannot excrete excess potassium and sodium, leading to severe hyperkalemia, cardiac arrhythmias, and fluid volume overload."
+      },
+
+      // V. Acid-Related Drugs
+      {
+        id: 17,
+        sectionId: 'acid',
+        sectionTitle: 'V. Acid-Related Drugs (GERD & Antacids)',
+        targetPopulation: 'Hepatic Impairment',
+        question: "Which PPI requires a dose reduction specifically in \"Moderate-Severe\" hepatic disease?",
+        choices: [
+          "Omeprazole",
+          "Lansoprazole",
+          "Esomeprazole",
+          "Famotidine"
+        ],
+        correctIndex: 1, // Lansoprazole
+        explanation: "Lansoprazole is extensively metabolized in the liver via CYP2C19 and CYP3A4. In patients with severe hepatic impairment, its elimination half-life is substantially prolonged and AUC increases dramatically; clinical product monographs specifically mandate a 50% dose reduction (max 15 mg/day) in severe hepatic disease."
+      },
+      {
+        id: 18,
+        sectionId: 'acid',
+        sectionTitle: 'V. Acid-Related Drugs (GERD & Antacids)',
+        targetPopulation: 'Hepatic Impairment',
+        question: "What is the maximum dose of Esomeprazole for patients with severe hepatic impairment?",
+        choices: [
+          "10 mg/day",
+          "20 mg/day",
+          "40 mg/day",
+          "80 mg/day"
+        ],
+        correctIndex: 1, // 20 mg/day
+        explanation: "For patients with severe liver impairment (Child-Pugh Class C), the systemic exposure (AUC) to Esomeprazole is more than doubled compared to healthy subjects. Consequently, the maximum recommended daily dose should not exceed 20 mg/day."
+      },
+      {
+        id: 19,
+        sectionId: 'acid',
+        sectionTitle: 'V. Acid-Related Drugs (GERD & Antacids)',
+        targetPopulation: 'Renal Impairment',
+        question: "For Famotidine 20mg, a dose reduction is required if CrCl is:",
+        choices: [
+          "< 50 mL/min (moderate)",
+          "100 mL/min (normal)",
+          "80 mL/min (mild)",
+          "No reduction needed"
+        ],
+        correctIndex: 0, // < 50 mL/min (moderate)
+        explanation: "Famotidine is predominantly eliminated by renal excretion (65-70%). When Creatinine Clearance (CrCl) drops below 50 mL/min, clearance decreases linearly, leading to prolonged half-life and dangerous CNS toxicity (confusion, delirium, seizures, particularly in elderly patients). Dosage must be decreased to 10-20 mg once daily or every 48 hours."
+      },
+      {
+        id: 20,
+        sectionId: 'acid',
+        sectionTitle: 'V. Acid-Related Drugs (GERD & Antacids)',
+        targetPopulation: 'Renal Impairment',
+        question: "Why Aluminum/Magnesium antacids should be avoided in severe renal impairment?",
+        choices: [
+          "Risk of Al/Mg accumulation and toxicity",
+          "They significantly increase the risk of forming uric acid kidney stones.",
+          "They are not effective",
+          "Risk of severe metabolic alkalosis"
+        ],
+        correctIndex: 0, // Risk of Al/Mg accumulation and toxicity
+        explanation: "Under normal conditions, small absorbed fractions of aluminum and magnesium are excreted through the kidneys. In severe renal insufficiency (eGFR < 30 mL/min), aluminum retention causes dialysis encephalopathy, microcytic anemia, and osteomalacia, while magnesium accumulation causes dangerous hypermagnesemia (hypotension, heart block, respiratory depression)."
+      }
+    ];
+
+    /* ==================== STATE MANAGEMENT ==================== */
+    const state = {
+      userName: '',
+      userLevel: '',
+      mode: 'instant', // 'instant' or 'review'
+      currentIndex: 0,
+      userAnswers: {}, // key: questionId (1-20), value: selectedIndex
+      hasAnswered: {}, // key: questionId, value: boolean
+      reviewFilter: 'all', // 'all', 'correct', 'incorrect'
+      quizStartedAt: null,
+      quizEndedAt: null,
+      timerInterval: null
+    };
+
+    /* Category definitions for scoring breakdown */
+    const CATEGORIES = [
+      { id: 'analgesics', name: 'Analgesics & NSAIDs', total: 5 },
+      { id: 'antihistamines', name: 'Antihistamines & Decongestants', total: 4 },
+      { id: 'mucolytics', name: 'Mucolytics & Antitussives', total: 3 },
+      { id: 'gi', name: 'Gastrointestinal Drugs', total: 4 },
+      { id: 'acid', name: 'Acid-Related & Antacids', total: 4 }
+    ];
+
+    /* ==================== INITIALIZATION & MODE HANDLING ==================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Wire mode card visual selections
+      const modeInstantRadio = document.querySelector('input[name="quizMode"][value="instant"]');
+      const modeEndRadio = document.querySelector('input[name="quizMode"][value="review"]');
+      const cardInstant = document.getElementById('modeCardInstant');
+      const cardEnd = document.getElementById('modeCardEnd');
+
+      function updateModeCardStyles() {
+        if (modeInstantRadio.checked) {
+          cardInstant.classList.add('border-teal-500', 'bg-teal-50/50');
+          cardInstant.classList.remove('border-slate-200', 'bg-white');
+          cardEnd.classList.remove('border-teal-500', 'bg-teal-50/50');
+          cardEnd.classList.add('border-slate-200', 'bg-white');
+        } else {
+          cardEnd.classList.add('border-blue-500', 'bg-blue-50/50');
+          cardEnd.classList.remove('border-slate-200', 'bg-white');
+          cardInstant.classList.remove('border-teal-500', 'bg-teal-50/50');
+          cardInstant.classList.add('border-slate-200', 'bg-white');
+        }
+      }
+
+      modeInstantRadio.addEventListener('change', updateModeCardStyles);
+      modeEndRadio.addEventListener('change', updateModeCardStyles);
+
+      cardInstant.addEventListener('click', () => {
+        modeInstantRadio.checked = true;
+        updateModeCardStyles();
+      });
+      cardEnd.addEventListener('click', () => {
+        modeEndRadio.checked = true;
+        updateModeCardStyles();
+      });
+
+      updateModeCardStyles();
+    });
+
+    /* ==================== QUIZ START ==================== */
+    function startQuiz() {
+      const nameInput = document.getElementById('userNameInput').value.trim();
+      const levelInput = document.getElementById('userLevelInput').value;
+      const modeInput = document.querySelector('input[name="quizMode"]:checked').value;
+      const errorDiv = document.getElementById('setupErrorMsg');
+
+      if (!nameInput) {
+        errorDiv.textContent = "Please enter your name to proceed.";
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+      if (!levelInput) {
+        errorDiv.textContent = "Please select your Pharmacist Level.";
+        errorDiv.classList.remove('hidden');
+        return;
+      }
+
+      errorDiv.classList.add('hidden');
+
+      // Populate state
+      state.userName = nameInput;
+      state.userLevel = levelInput;
+      state.mode = modeInput;
+      state.currentIndex = 0;
+      state.userAnswers = {};
+      state.hasAnswered = {};
+      state.quizStartedAt = new Date();
+
+      // Start elapsed timer
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      const timerDisplay = document.getElementById('quizTimerDisplay');
+      timerDisplay.textContent = '00:00';
+      state.timerInterval = setInterval(() => {
+        const elapsedSec = Math.floor((new Date() - state.quizStartedAt) / 1000);
+        const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+        const secs = String(elapsedSec % 60).padStart(2, '0');
+        timerDisplay.textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      // Update Navigation Header Meta
+      document.getElementById('navUserName').textContent = state.userName;
+      document.getElementById('navUserLevel').textContent = state.userLevel;
+      document.getElementById('navModeName').textContent = state.mode === 'instant' ? 'Instant Feedback' : 'End Review Mode';
+      
+      const modeBadge = document.getElementById('navModeBadge');
+      if (state.mode === 'instant') {
+        modeBadge.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200 flex items-center gap-1.5";
+      } else {
+        modeBadge.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1.5";
+      }
+
+      document.getElementById('navQuizMeta').classList.remove('hidden');
+
+      // Hide Landing, show Quiz
+      document.getElementById('landingView').classList.add('hidden');
+      document.getElementById('resultsView').classList.add('hidden');
+      document.getElementById('quizView').classList.remove('hidden');
+
+      // Render Navigator Pills
+      renderNavigatorPills();
+
+      // Render Question 1
+      renderCurrentQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==================== RENDERING QUESTIONS ==================== */
+    function renderCurrentQuestion() {
+      const q = QUIZ_DATA[state.currentIndex];
+      const isInstant = state.mode === 'instant';
+      const isAnswered = state.hasAnswered[q.id] === true;
+      const userSelectedChoice = state.userAnswers[q.id];
+
+      // Update Question Header elements
+      document.getElementById('questionSectionBadge').textContent = q.sectionTitle;
+      document.getElementById('questionIndexBadge').textContent = `Question ${state.currentIndex + 1} of ${QUIZ_DATA.length}`;
+      document.getElementById('currentQNumberDisplay').textContent = state.currentIndex + 1;
+      document.getElementById('currentQuestionText').textContent = q.question;
+      document.getElementById('currentQuestionSpecialBadge').textContent = `Target: ${q.targetPopulation}`;
+
+      // Progress bar & counts
+      const answeredCount = Object.keys(state.userAnswers).length;
+      document.getElementById('answeredCountSpan').textContent = answeredCount;
+      const progressPercent = ((state.currentIndex + 1) / QUIZ_DATA.length) * 100;
+      document.getElementById('quizProgressBar').style.width = `${progressPercent}%`;
+
+      // Update Prev / Next Buttons
+      const prevBtn = document.getElementById('prevQuestionBtn');
+      const nextBtn = document.getElementById('nextQuestionBtn');
+      const submitBtn = document.getElementById('submitQuizBtn');
+
+      prevBtn.disabled = state.currentIndex === 0;
+
+      if (state.currentIndex === QUIZ_DATA.length - 1) {
+        nextBtn.classList.add('hidden');
+        submitBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        if (state.mode === 'review') {
+          submitBtn.classList.remove('hidden');
+        } else {
+          submitBtn.classList.add('hidden');
+        }
+      }
+
+      // Render Choices
+      const container = document.getElementById('choicesContainer');
+      container.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.choices.forEach((choiceText, idx) => {
+        const optionBtn = document.createElement('div');
+        optionBtn.className = "option-card flex items-center justify-between p-4 rounded-xl border border-slate-200 cursor-pointer bg-white transition-all text-slate-800 text-sm";
+        optionBtn.setAttribute('data-choice-index', idx);
+
+        let letterBg = "bg-slate-100 text-slate-700 border-slate-200";
+        let statusIcon = "";
+        let extraClasses = "";
+
+        // Check styling based on mode and answered state
+        if (isInstant) {
+          if (isAnswered) {
+            optionBtn.classList.add('locked', 'cursor-default');
+            if (idx === q.correctIndex) {
+              // Always highlight correct answer in green
+              extraClasses = "border-teal-500 bg-teal-50/80 text-teal-950 font-semibold ring-1 ring-teal-500";
+              letterBg = "bg-teal-600 text-white border-teal-600";
+              statusIcon = `<span class="flex items-center gap-1 text-teal-700 text-xs font-bold"><svg class="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Correct</span>`;
+            } else if (idx === userSelectedChoice) {
+              // Highlight user's incorrect choice in red
+              extraClasses = "border-rose-400 bg-rose-50/80 text-rose-950 font-semibold ring-1 ring-rose-400";
+              letterBg = "bg-rose-600 text-white border-rose-600";
+              statusIcon = `<span class="flex items-center gap-1 text-rose-700 text-xs font-bold"><svg class="w-5 h-5 text-rose-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg> Incorrect</span>`;
+            } else {
+              extraClasses = "opacity-50 border-slate-200 bg-slate-50";
+            }
+          }
+        } else {
+          // Review mode: simple selection highlight
+          if (userSelectedChoice === idx) {
+            extraClasses = "border-blue-600 bg-blue-50/80 text-blue-950 font-semibold ring-2 ring-blue-500/20";
+            letterBg = "bg-blue-600 text-white border-blue-600";
+            statusIcon = `<svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`;
+          }
+        }
+
+        if (extraClasses) {
+          optionBtn.className += ` ${extraClasses}`;
+        }
+
+        optionBtn.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${letterBg}">
+              ${letters[idx]}
+            </span>
+            <span class="leading-relaxed">${choiceText}</span>
+          </div>
+          <div>${statusIcon}</div>
+        `;
+
+        if (!isInstant || !isAnswered) {
+          optionBtn.onclick = () => selectChoice(q.id, idx);
+        }
+
+        container.appendChild(optionBtn);
+      });
+
+      // Handle Instant Feedback Box
+      const feedbackBox = document.getElementById('instantFeedbackBox');
+      if (isInstant && isAnswered) {
+        feedbackBox.classList.remove('hidden');
+        const isCorrect = userSelectedChoice === q.correctIndex;
+        const iconDiv = document.getElementById('feedbackIcon');
+        const heading = document.getElementById('feedbackHeading');
+        const rationale = document.getElementById('feedbackRationale');
+
+        if (isCorrect) {
+          feedbackBox.className = "fade-in p-4 sm:p-5 rounded-xl border border-teal-200 bg-teal-50 text-teal-900";
+          iconDiv.className = "w-6 h-6 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5";
+          iconDiv.innerHTML = "✓";
+          heading.textContent = "Correct Clinical Decision!";
+          heading.className = "font-bold text-sm text-teal-900";
+          rationale.className = "text-xs sm:text-sm text-teal-800 leading-relaxed mt-1";
+        } else {
+          feedbackBox.className = "fade-in p-4 sm:p-5 rounded-xl border border-rose-200 bg-rose-50 text-rose-900";
+          iconDiv.className = "w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5";
+          iconDiv.innerHTML = "✕";
+          heading.textContent = `Incorrect Choice — Correct Answer: ${q.choices[q.correctIndex]}`;
+          heading.className = "font-bold text-sm text-rose-900";
+          rationale.className = "text-xs sm:text-sm text-rose-800 leading-relaxed mt-1";
+        }
+        rationale.innerHTML = `<strong>Clinical Rationale:</strong> ${q.explanation}`;
+      } else {
+        feedbackBox.classList.add('hidden');
+      }
+
+      // Update Quick Navigator Pills
+      updateNavigatorPillsActiveState();
+    }
+
+    /* ==================== CHOICE SELECTION ==================== */
+    function selectChoice(questionId, choiceIndex) {
+      const q = QUIZ_DATA.find(item => item.id === questionId);
+      if (!q) return;
+
+      // In Instant Feedback mode, if already answered, prevent re-clicking
+      if (state.mode === 'instant' && state.hasAnswered[questionId]) {
+        return;
+      }
+
+      // Record answer
+      state.userAnswers[questionId] = choiceIndex;
+      state.hasAnswered[questionId] = true;
+
+      // Re-render question to apply styling/feedback
+      renderCurrentQuestion();
+      renderNavigatorPills();
+    }
+
+    /* ==================== QUESTION NAVIGATION ==================== */
+    function navigateQuestion(direction) {
+      const nextIndex = state.currentIndex + direction;
+      if (nextIndex >= 0 && nextIndex < QUIZ_DATA.length) {
+        state.currentIndex = nextIndex;
+        renderCurrentQuestion();
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+      }
+    }
+
+    function jumpToQuestion(index) {
+      if (index >= 0 && index < QUIZ_DATA.length) {
+        state.currentIndex = index;
+        renderCurrentQuestion();
+        // Close modal if open
+        const modal = document.getElementById('questionGridModal');
+        if (!modal.classList.contains('hidden')) {
+          toggleQuestionGridModal();
+        }
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+      }
+    }
+
+    /* ==================== QUICK NAVIGATOR PILLS ==================== */
+    function renderNavigatorPills() {
+      const desktopContainer = document.getElementById('questionPillsContainer');
+      const modalContainer = document.getElementById('modalGridPills');
+      
+      desktopContainer.innerHTML = '';
+      modalContainer.innerHTML = '';
+
+      QUIZ_DATA.forEach((q, idx) => {
+        const isCurrent = state.currentIndex === idx;
+        const isAnswered = state.hasAnswered[q.id] === true;
+
+        let baseClasses = "w-9 h-9 sm:w-10 sm:h-10 rounded-xl text-xs font-bold transition-all flex items-center justify-center cursor-pointer border";
+
+        if (isCurrent) {
+          baseClasses += " ring-2 ring-teal-500 ring-offset-2 border-teal-600 ";
+        }
+
+        if (isAnswered) {
+          baseClasses += " bg-teal-600 text-white border-teal-600";
+        } else {
+          baseClasses += " bg-white text-slate-700 border-slate-200 hover:bg-slate-100";
+        }
+
+        // Desktop pill
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = baseClasses;
+        pill.textContent = idx + 1;
+        pill.onclick = () => jumpToQuestion(idx);
+        desktopContainer.appendChild(pill);
+
+        // Modal pill
+        const modalPill = document.createElement('button');
+        modalPill.type = 'button';
+        modalPill.className = baseClasses + " w-full h-11";
+        modalPill.textContent = idx + 1;
+        modalPill.onclick = () => jumpToQuestion(idx);
+        modalContainer.appendChild(modalPill);
+      });
+    }
+
+    function updateNavigatorPillsActiveState() {
+      renderNavigatorPills();
+    }
+
+    function toggleQuestionGridModal() {
+      const modal = document.getElementById('questionGridModal');
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    /* ==================== SUBMISSION & GRADING ==================== */
+    function promptSubmitQuiz() {
+      const answeredCount = Object.keys(state.userAnswers).length;
+      const totalQuestions = QUIZ_DATA.length;
+      const unansweredCount = totalQuestions - answeredCount;
+
+      const modal = document.getElementById('confirmSubmitModal');
+      const msg = document.getElementById('confirmSubmitMsg');
+
+      if (unansweredCount > 0) {
+        msg.innerHTML = `You have answered <strong>${answeredCount}</strong> of <strong>${totalQuestions}</strong> questions.<br><span class="text-amber-700 font-semibold">${unansweredCount} questions are still unanswered.</span><br>Unanswered questions will be marked as incorrect. Are you sure you want to finish?`;
+      } else {
+        msg.innerHTML = `You have answered all <strong>${totalQuestions}</strong> questions!<br>Ready to generate your comprehensive performance report and answer audit?`;
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSubmitModal() {
+      const modal = document.getElementById('confirmSubmitModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function finalizeQuizSubmission() {
+      closeSubmitModal();
+      if (state.timerInterval) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+      }
+      state.quizEndedAt = new Date();
+
+      // Calculate score
+      let correctScore = 0;
+      QUIZ_DATA.forEach(q => {
+        if (state.userAnswers[q.id] === q.correctIndex) {
+          correctScore++;
+        }
+      });
+
+      renderResultsView(correctScore);
+    }
+
+    /* ==================== RESULTS VIEW RENDERING ==================== */
+    function renderResultsView(score) {
+      const total = QUIZ_DATA.length;
+      const percentage = Math.round((score / total) * 100);
+
+      // Hide quiz view, show results
+      document.getElementById('quizView').classList.add('hidden');
+      document.getElementById('resultsView').classList.remove('hidden');
+      document.getElementById('navQuizMeta').classList.add('hidden');
+
+      // Calculate Duration
+      const totalSec = Math.max(1, Math.floor((state.quizEndedAt - state.quizStartedAt) / 1000));
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      const durStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
+      document.getElementById('resDuration').textContent = durStr;
+
+      // Populate User metadata
+      document.getElementById('resUserName').textContent = state.userName;
+      document.getElementById('resUserLevel').textContent = state.userLevel;
+      document.getElementById('resMode').textContent = state.mode === 'instant' ? 'Instant Feedback' : 'End Review';
+      document.getElementById('resDate').textContent = new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      // Populate score figures
+      document.getElementById('resScoreValue').textContent = score;
+      document.getElementById('resPercentage').textContent = `${percentage}% Accuracy`;
+
+      // Verdict badge & tier
+      const badge = document.getElementById('scoreVerdictBadge');
+      if (percentage >= 85) {
+        badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        badge.innerHTML = `<span>🏆</span> Clinical Excellence / Mastery`;
+        launchConfetti();
+      } else if (percentage >= 70) {
+        badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-300";
+        badge.innerHTML = `<span>⭐</span> Proficient Competency`;
+      } else {
+        badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300";
+        badge.innerHTML = `<span>📚</span> Further Clinical Review Recommended`;
+      }
+
+      // Populate Category Breakdown
+      renderCategoryPerformance();
+
+      // Populate Filter counts
+      const incorrectCount = total - score;
+      document.getElementById('incorrectCountBadge').textContent = incorrectCount;
+      document.getElementById('correctCountBadge').textContent = score;
+
+      // Render Question Audit List
+      renderQuestionAuditList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCategoryPerformance() {
+      const container = document.getElementById('categoryStatsGrid');
+      container.innerHTML = '';
+
+      CATEGORIES.forEach(cat => {
+        const catQuestions = QUIZ_DATA.filter(q => q.sectionId === cat.id);
+        let catCorrect = 0;
+        catQuestions.forEach(q => {
+          if (state.userAnswers[q.id] === q.correctIndex) {
+            catCorrect++;
+          }
+        });
+        const catPct = Math.round((catCorrect / cat.total) * 100);
+
+        let barColor = "bg-teal-600";
+        if (catPct < 60) barColor = "bg-rose-500";
+        else if (catPct < 80) barColor = "bg-amber-500";
+
+        const card = document.createElement('div');
+        card.className = "p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2";
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-800 truncate pr-2">${cat.name}</span>
+            <span class="font-semibold text-slate-600">${catCorrect}/${cat.total} (${catPct}%)</span>
+          </div>
+          <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+            <div class="${barColor} h-full rounded-full" style="width: ${catPct}%"></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* ==================== AUDIT LIST & FILTERS ==================== */
+    function setReviewFilter(filterType) {
+      state.reviewFilter = filterType;
+
+      const btnAll = document.getElementById('filterBtnAll');
+      const btnIncorrect = document.getElementById('filterBtnIncorrect');
+      const btnCorrect = document.getElementById('filterBtnCorrect');
+
+      [btnAll, btnIncorrect, btnCorrect].forEach(btn => {
+        btn.className = "px-3 py-1.5 rounded-lg hover:text-slate-900 text-slate-600 transition-colors";
+      });
+
+      if (filterType === 'all') {
+        btnAll.className = "px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-900 font-bold";
+      } else if (filterType === 'incorrect') {
+        btnIncorrect.className = "px-3 py-1.5 rounded-lg bg-white shadow-xs text-rose-700 font-bold";
+      } else if (filterType === 'correct') {
+        btnCorrect.className = "px-3 py-1.5 rounded-lg bg-white shadow-xs text-teal-800 font-bold";
+      }
+
+      renderQuestionAuditList();
+    }
+
+    function renderQuestionAuditList() {
+      const container = document.getElementById('reviewQuestionsContainer');
+      container.innerHTML = '';
+
+      let list = QUIZ_DATA;
+
+      if (state.reviewFilter === 'correct') {
+        list = QUIZ_DATA.filter(q => state.userAnswers[q.id] === q.correctIndex);
+      } else if (state.reviewFilter === 'incorrect') {
+        list = QUIZ_DATA.filter(q => state.userAnswers[q.id] !== q.correctIndex);
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
+            <p class="text-sm font-medium">No questions match the selected filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach((q) => {
+        const userChoiceIndex = state.userAnswers[q.id];
+        const isAnswered = userChoiceIndex !== undefined;
+        const isCorrect = isAnswered && (userChoiceIndex === q.correctIndex);
+
+        const card = document.createElement('div');
+        card.className = "p-5 sm:p-6 rounded-2xl border bg-white space-y-4 shadow-xs";
+
+        let statusBadge = "";
+        let borderClasses = "border-slate-200";
+
+        if (isCorrect) {
+          borderClasses = "border-teal-200 bg-teal-50/20";
+          statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200 flex items-center gap-1">✓ Correct</span>`;
+        } else if (!isAnswered) {
+          borderClasses = "border-amber-200 bg-amber-50/20";
+          statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">Unanswered</span>`;
+        } else {
+          borderClasses = "border-rose-200 bg-rose-50/20";
+          statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">✕ Incorrect</span>`;
+        }
+
+        card.className += ` ${borderClasses}`;
+
+        // Build Choices summary for this card
+        let choicesHtml = q.choices.map((choice, idx) => {
+          let itemStyle = "border-slate-200 bg-white text-slate-700";
+          let badge = "";
+
+          if (idx === q.correctIndex) {
+            itemStyle = "border-teal-500 bg-teal-50 text-teal-900 font-semibold ring-1 ring-teal-500";
+            badge = `<span class="text-[11px] font-bold text-teal-700 ml-auto flex items-center gap-1">Correct Answer</span>`;
+          } else if (idx === userChoiceIndex && !isCorrect) {
+            itemStyle = "border-rose-300 bg-rose-50 text-rose-900 font-medium";
+            badge = `<span class="text-[11px] font-bold text-rose-600 ml-auto">Your Choice</span>`;
+          }
+
+          const letters = ['A', 'B', 'C', 'D'];
+
+          return `
+            <div class="flex items-center justify-between p-2.5 rounded-lg border text-xs sm:text-sm ${itemStyle}">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded flex items-center justify-center font-bold text-[10px] bg-slate-100 text-slate-600">${letters[idx]}</span>
+                <span>${choice}</span>
+              </div>
+              ${badge}
+            </div>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-extrabold text-teal-700 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">Q${q.id}</span>
+              <span class="text-xs font-semibold text-slate-500">${q.sectionTitle}</span>
+              <span class="text-[11px] font-medium text-slate-400">• ${q.targetPopulation}</span>
+            </div>
+            <div>${statusBadge}</div>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+            ${q.question}
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            ${choicesHtml}
+          </div>
+
+          <!-- Clinical Rationale -->
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-relaxed">
+            <strong class="text-slate-900 block mb-0.5">Clinical Rationale & Special Populations Guideline:</strong>
+            ${q.explanation}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    /* ==================== CELEBRATION & CONFETTI ==================== */
+    function launchConfetti() {
+      const canvas = document.createElement('canvas');
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100vw';
+      canvas.style.height = '100vh';
+      canvas.style.pointerEvents = 'none';
+      canvas.style.zIndex = '9999';
+      document.body.appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#0d9488', '#14b8a6', '#0284c7', '#38bdf8', '#fbbf24', '#f43f5e', '#a855f7'];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.4,
+          r: Math.random() * 5 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 2,
+          rot: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 8
+        });
+      }
+
+      let start = performance.now();
+      function animate(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.rotSpeed;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 1.5);
+          ctx.restore();
+        });
+
+        if (time - start < 3500) {
+          requestAnimationFrame(animate);
+        } else {
+          canvas.remove();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    /* ==================== RESET & EXIT UTILITIES ==================== */
+    function restartQuiz() {
+      if (state.timerInterval) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+      }
+      // Return to setup
+      document.getElementById('resultsView').classList.add('hidden');
+      document.getElementById('quizView').classList.add('hidden');
+      document.getElementById('landingView').classList.remove('hidden');
+      document.getElementById('navQuizMeta').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function confirmExitToHome() {
+      if (document.getElementById('quizView').classList.contains('hidden') && document.getElementById('resultsView').classList.contains('hidden')) {
+        return;
+      }
+      if (confirm("Are you sure you want to exit the current assessment? Your progress will be reset.")) {
+        restartQuiz();
+      }
+    }
+  </script>
+</body>
+</html>
